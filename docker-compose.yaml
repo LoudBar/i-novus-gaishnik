@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+
+  application:
+    image:
+      loudbar/gaishnik
+    container_name: app
+    ports:
+      - 8181:8181
+    depends_on:
+      - database
+    environment:
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/gaishnik_db?connectTimeout=30000"
+      - "SPRING_DATASOURCE_USERNAME=postgres"
+      - "SPRING_DATASOURCE_PASSWORD=qwerty007"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  database:
+    image:
+      postgres
+    container_name: database
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_DB: gaishnik_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qwerty007
+    volumes:
+      - /home/loudbar/postgresql/data:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
